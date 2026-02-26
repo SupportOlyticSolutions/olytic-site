@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olytic — Closed-Loop AI Systems for Revenue</title>
+  <meta name="description" content="Olytic designs and operates closed-loop AI systems inside revenue workflows. The system drafts. The system checks. The system learns. You stay in control." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --obsidian:    #0D1117;
+      --obsidian-2:  #161B22;
+      --obsidian-3:  #1C2128;
+      --gold:        #C8A96E;
+      --gold-dim:    rgba(200,169,110,0.12);
+      --gold-line:   rgba(200,169,110,0.25);
+      --steel:       #4A5568;
+      --surface:     #F7F7F5;
+      --surface-2:   #EFEFED;
+      --border:      #E5E4E0;
+      --border-dark: rgba(255,255,255,0.07);
+      --white:       #FFFFFF;
+      --text:        #1A1A1A;
+      --muted:       #6B7280;
+      --ink:         #484F58;
+      --green:       #16A34A;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      color: var(--text); background: var(--white);
+      -webkit-font-smoothing: antialiased; line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 1px 24px rgba(0,0,0,0.06); }
+
+    .nav-inner {
+      max-width: 1160px; margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px;
+    }
+
+    .nav-logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+    .nav-logo-word { font-size:18px; font-weight:700; color:var(--obsidian); letter-spacing:-0.4px; line-height:1; }
+    .nav-logo-word .y { color:var(--gold); }
+
+    .nav-links { display:flex; align-items:center; gap:28px; }
+    .nav-links a {
+      font-size:14px; font-weight:500; color:var(--steel);
+      text-decoration:none; transition:color 0.15s;
+    }
+    .nav-links a:hover { color:var(--obsidian); }
+
+    .nav-cta {
+      background:var(--obsidian); color:var(--white) !important;
+      padding:9px 22px; font-size:13px !important; font-weight:600 !important;
+      letter-spacing:0.1px; transition:opacity 0.15s;
+    }
+    .nav-cta:hover { opacity:0.82; }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    #home {
+      padding: 136px 0 100px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    #home::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 40%, rgba(200,169,110,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 10% 80%, rgba(74,85,104,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    #home::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .hero-layout {
+      max-width: 1160px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: 1fr 420px; gap: 64px; align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+      color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow::before { content:''; width:28px; height:1px; background:var(--gold); }
+
+    .hero h1 {
+      font-size: clamp(40px, 5.2vw, 64px);
+      font-weight: 700; color: var(--obsidian);
+      line-height: 1.05; letter-spacing: -2.5px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+
+    .hero-sub {
+      font-size: 18px; color: var(--steel); line-height: 1.75;
+      max-width: 520px; margin-bottom: 40px; font-weight: 400;
+    }
+
+    .hero-btns { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      cursor: pointer; border: none; letter-spacing: 0.1px;
+      transition: all 0.15s;
+    }
+    .btn-dark { background:var(--obsidian); color:var(--white); }
+    .btn-dark:hover { opacity:0.84; }
+    .btn-outline {
+      background: transparent; color: var(--obsidian);
+      border: 1px solid var(--border); font-size:14px;
+    }
+    .btn-outline:hover { border-color: var(--obsidian); }
+    .btn-ghost { background:none; color:var(--steel); padding:13px 4px; }
+    .btn-ghost:hover { color:var(--obsidian); }
+
+    /* Hero right — large OGO cycle mark */
+    .hero-visual {
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .hero-cycle { width: 380px; height: 380px; }
+
+    /* Proof strip under hero */
+    .proof-strip {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .proof-inner {
+      max-width: 1160px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 0; background: var(--border);
+    }
+    .proof-cell {
+      background: var(--surface);
+      padding: 28px 36px;
+    }
+    .proof-num {
+      font-size: 32px; font-weight: 700; color: var(--obsidian);
+      letter-spacing: -1.5px; line-height: 1; margin-bottom: 6px;
+    }
+    .proof-num em { font-style: normal; color: var(--gold); }
+    .proof-label { font-size: 14px; color: var(--muted); line-height: 1.55; }
+    .proof-source {
+      font-family: 'DM Mono', monospace; font-size: 9px; color: var(--border);
+      text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;
+      color: var(--muted); opacity: 0.5;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION SHARED
+    ══════════════════════════════════════ */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
+    section { padding: 96px 0; }
+
+    .mono {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 2px;
+      display: block; margin-bottom: 14px;
+    }
+    .mono.dark { color: rgba(200,169,110,0.55); }
+
+    .section-title {
+      font-size: clamp(28px, 3.5vw, 40px); font-weight: 700;
+      color: var(--obsidian); line-height: 1.1; letter-spacing: -0.8px;
+      margin-bottom: 14px;
+    }
+    .section-title.light { color: var(--white); }
+
+    .section-sub {
+      font-size: 17px; color: var(--muted); line-height: 1.75;
+      max-width: 560px;
+    }
+    .section-sub.light { color: rgba(255,255,255,0.45); }
+
+    /* ══════════════════════════════════════
+       OUR MODEL — OGO
+    ══════════════════════════════════════ */
+    #our-model { background: var(--white); padding: 96px 0; }
+
+    .model-intro {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+      margin-bottom: 64px;
+    }
+    .model-text {}
+    .model-text .section-sub { margin-bottom: 32px; }
+
+    .model-claim {
+      padding: 20px 24px;
+      border-left: 3px solid var(--gold);
+      background: var(--surface);
+    }
+    .model-claim p {
+      font-size: 15px; color: var(--obsidian); line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* OGO three layers */
+    .ogo-layers {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .ogo-layer {
+      background: var(--white); padding: 36px 32px;
+      position: relative; overflow: hidden;
+    }
+    .ogo-layer::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--gold);
+    }
+    .ogo-num {
+      font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .ogo-name { font-size: 18px; font-weight: 700; color: var(--obsidian); margin-bottom: 8px; }
+    .ogo-role {
+      font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px;
+    }
+    .ogo-desc { font-size: 14px; color: var(--steel); line-height: 1.7; margin-bottom: 20px; }
+    .ogo-items { list-style: none; }
+    .ogo-items li {
+      font-size: 13px; color: var(--muted); padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+    }
+    .ogo-items li:last-child { border-bottom: none; }
+    .ogo-items li::before { content:'›'; color: var(--gold); flex-shrink: 0; }
+
+    /* Human gates callout */
+    .human-gate-bar {
+      margin-top: 2px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--gold);
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .human-gate-bar svg { width: 14px; height: 14px; color: var(--gold); flex-shrink: 0; }
+    .human-gate-bar p { font-size: 13px; color: var(--steel); line-height: 1.55; }
+    .human-gate-bar strong { color: var(--obsidian); }
+
+    /* Loop visualization */
+    .loop-bar {
+      margin-top: 48px;
+      background: var(--obsidian); padding: 28px 36px;
+      display: flex; align-items: center; gap: 0;
+    }
+    .loop-step {
+      flex: 1; text-align: center; padding: 0 16px; position: relative;
+    }
+    .loop-step::after {
+      content: '›'; position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
+      color: var(--gold); font-size: 20px; line-height: 1;
+    }
+    .loop-step:last-child::after { display: none; }
+    .ls-mono {
+      font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(200,169,110,0.5);
+      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;
+    }
+    .ls-label { font-size: 14px; font-weight: 600; color: var(--white); }
+    .ls-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 3px; }
+    .loop-gate {
+      flex-shrink: 0; padding: 0 20px; display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+    }
+    .loop-gate svg { width: 12px; height: 12px; color: var(--gold); }
+    .loop-gate span { font-family:'DM Mono',monospace; font-size:8px; color:var(--gold); text-transform:uppercase; letter-spacing:1px; }
+
+    /* ══════════════════════════════════════
+       APPLICATIONS
+    ══════════════════════════════════════ */
+    #applications { background: var(--surface); padding: 96px 0; }
+
+    .apps-header { margin-bottom: 52px; }
+
+    .apps-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 1px;
+      background: var(--border); border: 1px solid var(--border);
+    }
+    .app-card {
+      background: var(--white); padding: 40px 38px;
+      position: relative; overflow: hidden;
+      transition: background 0.2s;
+    }
+    .app-card::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: var(--gold); opacity: 0; transition: opacity 0.2s;
+    }
+    .app-card:hover { background: var(--surface); }
+    .app-card:hover::before { opacity: 1; }
+
+    .app-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 2px;
+      border: 1px solid var(--gold-line); padding: 3px 10px;
+      margin-bottom: 18px;
+    }
+    .app-tag.available { color: var(--muted); border-color: var(--border); }
+    .app-tag.coming { color: var(--muted); border-color: var(--border); }
+
+    .app-name { font-size: 20px; font-weight: 700; color: var(--obsidian); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .app-tagline { font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 14px; }
+    .app-desc { font-size: 14px; color: var(--steel); line-height: 1.72; margin-bottom: 24px; }
+    .app-layers {
+      display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;
+    }
+    .app-layer {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--muted); line-height: 1.5;
+    }
+    .app-layer-dot {
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+      background: var(--gold); margin-top: 6px; opacity: 0.5;
+    }
+    .app-layer strong { color: var(--obsidian); font-weight: 600; }
+
+    .app-cta {
+      font-size: 13px; font-weight: 600; color: var(--gold);
+      display: inline-flex; align-items: center; gap: 4px; cursor: pointer;
+      text-decoration: none; transition: gap 0.15s;
+    }
+    .app-cta:hover { gap: 8px; }
+
+    /* Custom OGO card spans full width */
+    .app-card.full { grid-column: 1 / -1; }
+
+    /* ══════════════════════════════════════
+       HOW WE'RE DIFFERENT
+    ══════════════════════════════════════ */
+    #differentiation { background: var(--obsidian); padding: 96px 0; }
+
+    .diff-header { margin-bottom: 52px; }
+
+    .diff-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border-dark);
+      border: 1px solid var(--border-dark);
+      margin-bottom: 48px;
+    }
+    .diff-card { background: var(--obsidian-2); padding: 36px 32px; }
+    .diff-vs {
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      color: rgba(200,169,110,0.4); letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .diff-title { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 10px; line-height: 1.3; }
+    .diff-body { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.72; }
+
+    /* Not us / Us comparison */
+    .compare-table {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border-dark);
+      border: 1px solid var(--border-dark);
+    }
+    .compare-col { background: var(--obsidian-3); }
+    .compare-head {
+      padding: 14px 24px; border-bottom: 1px solid var(--border-dark);
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 2px;
+    }
+    .compare-head.not { color: rgba(255,255,255,0.25); }
+    .compare-head.us  { color: var(--gold); }
+    .compare-row {
+      padding: 13px 24px; border-bottom: 1px solid var(--border-dark);
+      font-size: 14px; line-height: 1.55; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row.not { color: rgba(255,255,255,0.28); }
+    .compare-row.not::before { content:'✗'; color: rgba(255,255,255,0.2); flex-shrink:0; }
+    .compare-row.us  { color: rgba(255,255,255,0.75); }
+    .compare-row.us::before  { content:'✓'; color: var(--gold); flex-shrink:0; }
+
+    /* ══════════════════════════════════════
+       CASE STUDIES
+    ══════════════════════════════════════ */
+    #case-studies { background: var(--white); padding: 96px 0; }
+
+    .cs-header { margin-bottom: 52px; }
+
+    .cs-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); margin-bottom: 48px;
+    }
+    .cs-card { background: var(--white); padding: 40px 38px; }
+    .cs-label {
+      font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .cs-label::before { content:''; width:20px; height:1px; background:var(--gold); }
+    .cs-outcome {
+      font-size: 34px; font-weight: 700; color: var(--obsidian);
+      letter-spacing: -1.5px; line-height: 1; margin-bottom: 8px;
+    }
+    .cs-outcome em { font-style: normal; color: var(--gold); }
+    .cs-what { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .cs-story { font-size: 14px; color: var(--steel); line-height: 1.72; margin-bottom: 24px; }
+    .cs-layers {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .cs-layer-tag {
+      font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 1px; padding: 3px 9px;
+      border: 1px solid var(--border); color: var(--muted);
+    }
+
+    /* Placeholder / coming soon card */
+    .cs-card.placeholder {
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center; min-height: 280px;
+    }
+    .cs-placeholder-inner { text-align: center; }
+    .cs-placeholder-inner p { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+    /* ══════════════════════════════════════
+       ABOUT
+    ══════════════════════════════════════ */
+    #about { background: var(--surface); padding: 96px 0; }
+
+    .about-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .about-text .section-sub { margin-bottom: 28px; }
+    .about-principle {
+      border-left: 3px solid var(--gold); padding: 14px 20px;
+      background: var(--white); margin-bottom: 12px;
+    }
+    .about-principle p { font-size: 14px; color: var(--steel); line-height: 1.65; }
+    .about-principle strong { color: var(--obsidian); }
+
+    .about-right {}
+    .team-block { margin-bottom: 32px; }
+    .team-mono {
+      font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+    }
+    .team-card {
+      background: var(--white); border: 1px solid var(--border); padding: 24px;
+      margin-bottom: 8px;
+    }
+    .team-name { font-size: 15px; font-weight: 700; color: var(--obsidian); margin-bottom: 3px; }
+    .team-role { font-family:'DM Mono',monospace; font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; }
+    .team-desc { font-size: 13px; color: var(--steel); line-height: 1.65; }
+
+    .about-model {
+      background: var(--obsidian); padding: 24px;
+    }
+    .about-model-label { font-family:'DM Mono',monospace; font-size:9px; color:rgba(200,169,110,0.5); text-transform:uppercase; letter-spacing:2px; margin-bottom:12px; }
+    .about-model-item { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border-dark); }
+    .about-model-item:last-child { border-bottom:none; }
+    .aml { font-size:12px; color:rgba(255,255,255,0.85); line-height:1.55; }
+    .aml-head { font-weight:700; color:var(--white); margin-bottom:2px; }
+    .ami-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:6px; }
+
+    /* ══════════════════════════════════════
+       CONTACT / CTA
+    ══════════════════════════════════════ */
+    #contact { background: var(--obsidian); padding: 96px 0; }
+
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+
+    .contact-left .section-title { color: var(--white); margin-bottom: 16px; }
+    .contact-left .section-sub { color: rgba(255,255,255,0.45); margin-bottom: 40px; }
+
+    .engagement-options { display:flex; flex-direction:column; gap:10px; }
+    .engagement-opt {
+      background: var(--obsidian-2); border: 1px solid var(--border-dark);
+      padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start;
+    }
+    .eng-icon {
+      width: 32px; height: 32px; background: var(--obsidian-3);
+      border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .eng-icon svg { width: 14px; height: 14px; color: var(--gold); }
+    .eng-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+    .eng-desc { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.55; }
+
+    .contact-right {}
+    .contact-box {
+      background: var(--white); padding: 36px;
+    }
+    .contact-box h3 { font-size: 17px; font-weight: 700; color: var(--obsidian); margin-bottom: 6px; }
+    .contact-box p { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+    .f-row { margin-bottom: 14px; }
+    .f-label { display:block; font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; }
+    .f-input, .f-textarea, .f-select {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); font-family:'DM Sans',sans-serif; font-size:13px;
+      padding: 10px 14px; outline: none; border-radius: 0; appearance: none;
+      transition: border-color 0.15s; resize: vertical;
+    }
+    .f-textarea { min-height: 90px; }
+    .f-input:focus, .f-textarea:focus, .f-select:focus { border-color: var(--gold-line); }
+    .f-input::placeholder, .f-textarea::placeholder { color: var(--muted); opacity:0.6; }
+    .f-btn {
+      width: 100%; background: var(--obsidian); color: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+      padding: 13px; border: none; cursor: pointer; transition: opacity 0.15s;
+      letter-spacing: 0.1px;
+    }
+    .f-btn:hover { opacity: 0.82; }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      background: var(--obsidian-2);
+      border-top: 1px solid var(--border-dark);
+      padding: 36px 0;
+    }
+    .footer-inner {
+      max-width: 1160px; margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .footer-logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+    .footer-logo-word { font-size:16px; font-weight:700; color:var(--white); letter-spacing:-0.4px; }
+    .footer-logo-word .y { color:var(--gold); }
+    .footer-meta { font-size:12px; color:rgba(255,255,255,0.25); text-align:center; }
+    .footer-links { display:flex; gap:24px; }
+    .footer-links a { font-size:12px; color:rgba(255,255,255,0.3); text-decoration:none; transition:color 0.15s; }
+    .footer-links a:hover { color:rgba(255,255,255,0.6); }
+
+    /* ══════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════ */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 980px) {
+      .hero-layout { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .model-intro { grid-template-columns: 1fr; gap: 40px; }
+      .ogo-layers { grid-template-columns: 1fr; }
+      .ogo-layer::before { width: 100%; height: 3px; }
+      .apps-grid { grid-template-columns: 1fr; }
+      .app-card.full { grid-column: 1; }
+      .diff-grid { grid-template-columns: 1fr; }
+      .cs-grid { grid-template-columns: 1fr; }
+      .about-layout { grid-template-columns: 1fr; gap: 48px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      .compare-table { grid-template-columns: 1fr; }
+      .proof-inner { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+    @media (max-width: 600px) {
+      #home { padding: 110px 0 80px; }
+      section { padding: 72px 0; }
+      .container { padding: 0 20px; }
+      .hero-layout { padding: 0 20px; }
+      .loop-bar { flex-direction: column; gap: 8px; padding: 24px; }
+      .loop-step::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#home">
+        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+          <path d="M50,8 A42,42 0 0 1 86.4,71 L77.3,65.8 A31.5,31.5 0 0 0 50,18.5 Z" fill="#0D1117"/>
+          <path d="M86.4,71 A42,42 0 0 1 13.6,71 L22.7,65.8 A31.5,31.5 0 0 0 77.3,65.8 Z" fill="#C8A96E"/>
+          <path d="M13.6,71 A42,42 0 0 1 50,8 L50,18.5 A31.5,31.5 0 0 0 22.7,65.8 Z" fill="#4A5568"/>
+          <polygon points="89,72.5 77.3,74.6 74.7,64.2" fill="#0D1117"/>
+          <polygon points="11,72.5 15,61.4 25.3,64.2" fill="#C8A96E"/>
+          <polygon points="50,5 57.6,14.1 50,21.5" fill="#4A5568"/>
+        </svg>
+        <span class="nav-logo-word">Ol<span class="y">y</span>tic</span>
+      </a>
+      <div class="nav-links">
+        <a href="#our-model">Our Model</a>
+        <a href="#applications">Applications</a>
+        <a href="#case-studies">Case Studies</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="nav-cta">Get in Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════
+       HERO
+  ═══════════════════════════════════ -->
+  <section id="home">
+    <div class="hero-layout">
+      <div class="hero-left">
+        <div class="hero-eyebrow">Closed-Loop AI Systems</div>
+        <h1 class="hero">
+          We design AI systems<br />that <em>compound</em><br />over time.
+        </h1>
+        <p class="hero-sub">
+          Not a tool. Not a consultant. A closed-loop system inside your revenue workflow — drafting, checking, learning, and improving every cycle. You stay in control at every decision point.
+        </p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn btn-dark">Start a Conversation</a>
+          <a href="#our-model" class="btn btn-ghost">
+            See how it works
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <!-- Large OGO cycle mark -->
+        <svg class="hero-cycle" viewBox="0 0 480 480" fill="none">
+          <!-- Ring at r=160, centered at 240,240. Stroke-width=20 so outer edge is r=170, inner edge r=150 -->
+          <!-- Top segment: OPERATOR — dark, runs roughly top to bottom-right -->
+          <path d="M240,80 A160,160 0 0 1 378.6,320" stroke="#1C2128" stroke-width="20" fill="none" stroke-linecap="butt"/>
+          <!-- Bottom segment: GOVERNOR — gold, runs bottom-right to bottom-left -->
+          <path d="M378.6,320 A160,160 0 0 1 101.4,320" stroke="#C8A96E" stroke-width="20" fill="none" stroke-linecap="butt"/>
+          <!-- Left segment: OPTIMIZER — steel, runs bottom-left back to top -->
+          <path d="M101.4,320 A160,160 0 0 1 240,80" stroke="#4A5568" stroke-width="20" fill="none" stroke-linecap="butt"/>
+
+          <!-- Arrowheads at end of each segment -->
+          <polygon points="381,302 366,326 350,307" fill="#1C2128"/>
+          <polygon points="99,302 115,308 103,326" fill="#C8A96E"/>
+          <polygon points="240,76 250,98 230,98" fill="#4A5568"/>
+
+          <!-- Gap lines between segments (clean separation) -->
+          <line x1="240" y1="80" x2="240" y2="60" stroke="white" stroke-width="3"/>
+          <line x1="378.6" y1="320" x2="392" y2="329" stroke="white" stroke-width="3"/>
+          <line x1="101.4" y1="320" x2="88" y2="329" stroke="white" stroke-width="3"/>
+
+          <!-- Center circle -->
+          <circle cx="240" cy="240" r="120" fill="white"/>
+          <circle cx="240" cy="240" r="120" fill="none" stroke="rgba(200,169,110,0.12)" stroke-width="1"/>
+
+          <!-- Center text — well inside the ring -->
+          <text x="240" y="228" text-anchor="middle" font-family="'DM Mono', monospace" font-size="22" font-weight="500" fill="#0D1117" letter-spacing="6">OGO</text>
+          <text x="240" y="252" text-anchor="middle" font-family="'DM Mono', monospace" font-size="9" fill="#C8A96E" letter-spacing="3" opacity="0.7">CLOSED · LOOP</text>
+
+          <!-- Layer labels — outside the ring entirely -->
+          <!-- OPERATOR: top, above the ring -->
+          <text x="240" y="38" text-anchor="middle" font-family="'DM Mono', monospace" font-size="10" fill="#4A5568" letter-spacing="2.5">OPERATOR</text>
+
+          <!-- GOVERNOR: bottom-right, outside ring -->
+          <text x="430" y="346" text-anchor="end" font-family="'DM Mono', monospace" font-size="10" fill="#C8A96E" letter-spacing="2">GOVERNOR</text>
+
+          <!-- OPTIMIZER: bottom-left, outside ring -->
+          <text x="50" y="346" text-anchor="start" font-family="'DM Mono', monospace" font-size="10" fill="#C8A96E" letter-spacing="2">OPTIMIZER</text>
+
+          <!-- Human approval label at bottom -->
+          <circle cx="240" cy="400" r="4" fill="#C8A96E" opacity="0.5"/>
+          <text x="240" y="428" text-anchor="middle" font-family="'DM Mono', monospace" font-size="8" fill="rgba(200,169,110,0.4)" letter-spacing="2">HUMAN APPROVAL GATES</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof strip -->
+  <div class="proof-strip">
+    <div class="proof-inner">
+      <div class="proof-cell fade-in">
+        <div class="proof-num"><em>3×</em> faster</div>
+        <div class="proof-label">Content production vs. traditional agency models</div>
+      </div>
+      <div class="proof-cell fade-in">
+        <div class="proof-num">99<em>%</em></div>
+        <div class="proof-label">Governor check pass rate across deployed frameworks</div>
+      </div>
+      <div class="proof-cell fade-in">
+        <div class="proof-num">$0</div>
+        <div class="proof-label">Wasted on outputs that never reach customers — everything is approved first</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       OUR MODEL
+  ═══════════════════════════════════ -->
+  <section id="our-model">
+    <div class="container">
+
+      <div class="model-intro">
+        <div class="model-text fade-in">
+          <span class="mono">Our Model</span>
+          <h2 class="section-title">The OGO Architecture</h2>
+          <p class="section-sub">Three layers. One closed loop. Every framework we build is an implementation of the same architecture — configured for a specific revenue workflow.</p>
+          <div class="model-claim" style="margin-top:28px">
+            <p>The Operator drafts. The Governor checks. The Optimizer learns. You approve at every decision point. The loop compounds over time — each cycle informed by the last.</p>
+          </div>
+        </div>
+        <div class="model-visual fade-in" style="display:flex;align-items:center;justify-content:center;">
+          <!-- Compact cycle -->
+          <svg width="280" height="280" viewBox="0 0 400 400" fill="none">
+            <path d="M200,30 A170,170 0 0 1 347.4,285" stroke="#0D1117" stroke-width="22" fill="none"/>
+            <path d="M347.4,285 A170,170 0 0 1 52.6,285" stroke="#C8A96E" stroke-width="22" fill="none"/>
+            <path d="M52.6,285 A170,170 0 0 1 200,30" stroke="#4A5568" stroke-width="22" fill="none"/>
+            <polygon points="350,268 334,286 320,264" fill="#0D1117"/>
+            <polygon points="50,268 63,246 76,268" fill="#C8A96E"/>
+            <polygon points="200,27 210,48 200,60" fill="#4A5568"/>
+            <circle cx="200" cy="200" r="68" fill="none" stroke="rgba(200,169,110,0.08)" stroke-width="1"/>
+            <text x="200" y="195" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="rgba(200,169,110,0.35)" letter-spacing="3">OGO</text>
+            <text x="200" y="212" text-anchor="middle" font-family="'DM Mono',monospace" font-size="7" fill="rgba(255,255,255,0.12)" letter-spacing="2">LOOP</text>
+            <text x="200" y="52" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#4A5568" letter-spacing="1.5">OPERATOR</text>
+            <text x="352" y="316" text-anchor="end" font-family="'DM Mono',monospace" font-size="9" fill="#C8A96E" letter-spacing="1.5">GOVERNOR</text>
+            <text x="48" y="316" text-anchor="start" font-family="'DM Mono',monospace" font-size="9" fill="#C8A96E" letter-spacing="1.5">OPTIMIZER</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Three layer cards -->
+      <div class="ogo-layers fade-in">
+        <div class="ogo-layer">
+          <div class="ogo-num">01 — Operator</div>
+          <div class="ogo-name">Creates &amp; Executes</div>
+          <div class="ogo-role">Drafting layer</div>
+          <p class="ogo-desc">Takes your brief and strategy playbook as instructions. Drafts outputs for your review. Nothing is published until you approve it.</p>
+          <ul class="ogo-items">
+            <li>Brief-driven — you define the inputs</li>
+            <li>Drafts content, proposals, reports, or workflow outputs</li>
+            <li>Executes approved Optimizer recommendations</li>
+            <li>Human review before anything advances</li>
+          </ul>
+        </div>
+        <div class="ogo-layer">
+          <div class="ogo-num">02 — Governor</div>
+          <div class="ogo-name">Validates &amp; Holds Context</div>
+          <div class="ogo-role">Guardrail layer</div>
+          <p class="ogo-desc">Applies your rule sets to every Operator output. Holds brand memory, compliance rules, and contextual guardrails. Passes clean outputs. Flags the rest.</p>
+          <ul class="ogo-items">
+            <li>Your rules — voice, accuracy, compliance, positioning</li>
+            <li>Holds brand memory and chat context across cycles</li>
+            <li>Flags violations back to queue for your review</li>
+            <li>Tuned and maintained by Olytic over time</li>
+          </ul>
+        </div>
+        <div class="ogo-layer">
+          <div class="ogo-num">03 — Optimizer</div>
+          <div class="ogo-name">Reads &amp; Recommends</div>
+          <div class="ogo-role">Learning layer</div>
+          <p class="ogo-desc">Reads your analytics, CRM, and engagement data each cycle. Identifies gaps and opportunities. Surfaces ranked recommendations — you decide what gets acted on.</p>
+          <ul class="ogo-items">
+            <li>Reads signal sources: GA4, CRM, Search Console, and more</li>
+            <li>Surfaces evidence-backed recommendations each cycle</li>
+            <li>Approved recommendations queue to the Operator</li>
+            <li>Human approval required — nothing runs autonomously</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="human-gate-bar fade-in">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <p><strong>Human approval at every decision point.</strong> You set the brief the Operator works from. You approve drafts before they reach the Governor. You approve Optimizer recommendations before the Operator acts on them. The system amplifies your judgment — it does not replace it.</p>
+      </div>
+
+      <!-- The loop strip -->
+      <div class="loop-bar fade-in" style="margin-top:24px">
+        <div class="loop-step">
+          <div class="ls-mono">You</div>
+          <div class="ls-label">Set the Brief</div>
+          <div class="ls-sub">Strategy + inputs</div>
+        </div>
+        <div class="loop-gate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="loop-step">
+          <div class="ls-mono">Operator</div>
+          <div class="ls-label">Drafts</div>
+          <div class="ls-sub">From your brief</div>
+        </div>
+        <div class="loop-gate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>You approve</span>
+        </div>
+        <div class="loop-step">
+          <div class="ls-mono">Governor</div>
+          <div class="ls-label">Checks</div>
+          <div class="ls-sub">Against your rules</div>
+        </div>
+        <div class="loop-gate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="loop-step">
+          <div class="ls-mono">Optimizer</div>
+          <div class="ls-label">Learns</div>
+          <div class="ls-sub">From results</div>
+        </div>
+        <div class="loop-gate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>You approve</span>
+        </div>
+        <div class="loop-step">
+          <div class="ls-mono">Loop</div>
+          <div class="ls-label">Repeats</div>
+          <div class="ls-sub">Each cycle better</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       APPLICATIONS
+  ═══════════════════════════════════ -->
+  <section id="applications">
+    <div class="container">
+
+      <div class="apps-header fade-in">
+        <span class="mono">Applications</span>
+        <h2 class="section-title">Where OGO Gets Applied</h2>
+        <p class="section-sub">Each application is an independent OGO loop configured for a specific revenue workflow. Multiple loops can run in parallel — each one compounding independently.</p>
+      </div>
+
+      <div class="apps-grid fade-in">
+
+        <div class="app-card">
+          <div class="app-tag">Live</div>
+          <div class="app-name">Eversite</div>
+          <div class="app-tagline">Closed-loop web presence system</div>
+          <p class="app-desc">Your website becomes a compounding asset instead of a static document. The Operator drafts pages from your keyword strategy. The Governor checks every output against your brand rules. The Optimizer reads your analytics and tells the Operator what to build next.</p>
+          <div class="app-layers">
+            <div class="app-layer"><div class="app-layer-dot"></div><div><strong>Operator:</strong> Drafts pages, blog posts, and sections from your brief and content playbook.</div></div>
+            <div class="app-layer"><div class="app-layer-dot"></div><div><strong>Governor:</strong> Checks brand voice, accuracy claims, and competitive positioning before anything publishes.</div></div>
+            <div class="app-layer"><div class="app-layer-dot"></div><div><strong>Optimizer:</strong> Reads GA4, Search Console, and CRM to surface what to build next.</div></div>
+          </div>
+          <a href="#contact" class="app-cta">Discuss Eversite <span>›</span></a>
+        </div>
+
+        <div class="app-card">
+          <div class="app-tag">Available</div>
+          <div class="app-name">Perpetual Proposal</div>
+          <div class="app-tagline">Closed-loop deal room and proposal system</div>
+          <p class="app-desc">Every closed deal makes the next proposal better. The Operator drafts proposals from your deal playbook. The Governor enforces pricing guardrails and compliance language. The Optimizer learns from win/loss patterns and updates the playbook each cycle.</p>
+          <div class="app-layers">
+            <div class="app-layer"><div class="app-layer-dot"></div><div><strong>Operator:</strong> Drafts proposals from your ICP, pricing tiers, and objection library.</div></div>
+            <div class="app-layer"><div class="app-layer-dot"></div><div><strong>Governor:</strong> Enforces pricing guardrails, compliance language, and positioning rules.</div></div>
+            <div class="app-layer"><div class="app-layer-dot"></div><div><strong>Optimizer:</strong> Reads win/loss data and updates the playbook — making each cycle better than the last.</div></div>
+          </div>
+          <a href="#contact" class="app-cta">Discuss Perpetual Proposal <span>›</span></a>
+        </div>
+
+        <div class="app-card full">
+          <div class="app-tag available">Custom Build</div>
+          <div class="app-name">Custom OGO Implementation</div>
+          <div class="app-tagline">A bespoke closed loop for any revenue workflow</div>
+          <p class="app-desc" style="max-width:640px">If there's a repeatable process in your business that involves content creation, quality validation, or performance learning — we can build a closed loop around it. We scope the Operator brief, configure the Governor rules, define the Optimizer signal sources, and deploy a framework that compounds over time. Scoped per engagement.</p>
+          <a href="#contact" class="app-cta">Tell us what you're trying to solve <span>›</span></a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       HOW WE'RE DIFFERENT
+  ═══════════════════════════════════ -->
+  <section id="differentiation">
+    <div class="container">
+
+      <div class="diff-header fade-in">
+        <span class="mono dark">Positioning</span>
+        <h2 class="section-title light">Not a tool. Not a consultant.<br />Not a SaaS product.</h2>
+        <p class="section-sub light">Three things people confuse us with. Three reasons the comparison doesn't hold.</p>
+      </div>
+
+      <div class="diff-grid fade-in">
+        <div class="diff-card">
+          <div class="diff-vs">Vs. AI Tools</div>
+          <div class="diff-title">Tools need operators. Systems operate themselves.</div>
+          <p class="diff-body">AI writing tools give your team a faster keyboard. We build a system with a brief, rules, and a feedback loop — so the output gets better every cycle without more human input. You approve. You don't operate.</p>
+        </div>
+        <div class="diff-card">
+          <div class="diff-vs">Vs. Agencies / Consultants</div>
+          <div class="diff-title">Consultants leave. Systems stay and compound.</div>
+          <p class="diff-body">A consultant delivers a strategy deck. We deploy a system that executes that strategy every month — governed by your rules, optimized by your data. The value compounds after we configure it, not before.</p>
+        </div>
+        <div class="diff-card">
+          <div class="diff-vs">Vs. SaaS Products</div>
+          <div class="diff-title">SaaS gives you features. We give you a configured system.</div>
+          <p class="diff-body">SaaS products are horizontal — same tool for everyone. Our frameworks are configured for your workflow, your rules, your data. There's no self-serve. Every implementation is scoped, built, and maintained by us.</p>
+        </div>
+      </div>
+
+      <div class="compare-table fade-in">
+        <div class="compare-col">
+          <div class="compare-head not">What we are not</div>
+          <div class="compare-row not">Generic AI tools applied to your workflow without configuration</div>
+          <div class="compare-row not">A team of people doing the work manually each month</div>
+          <div class="compare-row not">A SaaS subscription that requires your team to operate it</div>
+          <div class="compare-row not">A one-time project that delivers a deck and walks away</div>
+          <div class="compare-row not">Automation that removes humans from the decision loop</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head us">What we are</div>
+          <div class="compare-row us">A configured OGO system built for your specific workflow and rules</div>
+          <div class="compare-row us">A system that runs every cycle, maintained by Olytic on retainer</div>
+          <div class="compare-row us">A system your team interacts with via approval — not operation</div>
+          <div class="compare-row us">A compounding asset that improves with every cycle of data</div>
+          <div class="compare-row us">Amplification of your judgment — human approval at every gate</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       CASE STUDIES
+  ═══════════════════════════════════ -->
+  <section id="case-studies">
+    <div class="container">
+
+      <div class="cs-header fade-in">
+        <span class="mono">Case Studies</span>
+        <h2 class="section-title">Systems in the Field</h2>
+        <p class="section-sub">What closed-loop systems produce when they run over time. Results compound — the longer the system runs, the larger the gap between where you started and where you are.</p>
+      </div>
+
+      <div class="cs-grid fade-in">
+
+        <div class="cs-card">
+          <div class="cs-label">Eversite — B2B SaaS</div>
+          <div class="cs-outcome"><em>+84K</em></div>
+          <div class="cs-what">Projected organic pipeline from zero in 90 days</div>
+          <p class="cs-story">A B2B SaaS company had a website that hadn't been touched in 18 months. No SEO, no consistent publishing, no system. We deployed Eversite, configured the Operator to their keyword strategy and ICP, set the Governor with their brand voice rules, and connected GA4 and Search Console to the Optimizer. 90 days later: 34 pages live, 99.1% Governor pass rate, and a measurable pipeline attribution beginning to emerge.</p>
+          <div class="cs-layers">
+            <span class="cs-layer-tag">Operator</span>
+            <span class="cs-layer-tag">Governor</span>
+            <span class="cs-layer-tag">Optimizer</span>
+            <span class="cs-layer-tag">GA4</span>
+            <span class="cs-layer-tag">Search Console</span>
+          </div>
+        </div>
+
+        <div class="cs-card placeholder">
+          <div class="cs-placeholder-inner">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E5E4E0" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <p>Next case study in progress.<br />Systems take time to compound.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       ABOUT
+  ═══════════════════════════════════ -->
+  <section id="about">
+    <div class="container">
+
+      <div class="about-layout">
+
+        <div class="about-text fade-in">
+          <span class="mono">About</span>
+          <h2 class="section-title">We built this because the alternative is a treadmill.</h2>
+          <p class="section-sub">Every agency, every SaaS tool, every AI wrapper puts humans back on the content treadmill. We wanted to know what happens if you build a real system instead.</p>
+
+          <div style="margin-top:32px">
+            <div class="about-principle">
+              <p><strong>Systems over services.</strong> Services require constant human input to produce output. Systems produce output because the loop is running — and they get better over time without more effort.</p>
+            </div>
+            <div class="about-principle">
+              <p><strong>Process-first, tool-agnostic.</strong> The OGO architecture is not tied to a specific AI model or platform. As the underlying tools improve, the frameworks improve. You don't migrate — we update.</p>
+            </div>
+            <div class="about-principle">
+              <p><strong>Amplification, not automation.</strong> Humans stay at every decision point. The Operator doesn't publish without your approval. The Optimizer doesn't act without your approval. The system makes your judgment more powerful — it doesn't replace it.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-right fade-in">
+          <div class="team-block">
+            <div class="team-mono">The Team</div>
+            <div class="team-card">
+              <div class="team-name">Josh</div>
+              <div class="team-role">Co-Founder — Systems &amp; Strategy</div>
+              <p class="team-desc">Revenue operations and go-to-market background. Built and scaled GTM systems at companies ranging from early-stage to enterprise. Focused on how the OGO architecture maps to real revenue workflows.</p>
+            </div>
+            <div class="team-card">
+              <div class="team-name">Partner</div>
+              <div class="team-role">Co-Founder — Build &amp; Implementation</div>
+              <p class="team-desc">Technical architecture and framework development. Responsible for the Lab — where frameworks are built, versioned, and stress-tested before client deployment. Focused on the engineering of closed-loop systems.</p>
+            </div>
+          </div>
+
+          <div class="about-model">
+            <div class="about-model-label">How We Engage</div>
+            <div class="about-model-item">
+              <div class="ami-dot"></div>
+              <div class="aml">
+                <div class="aml-head">Implementation Fee</div>
+                <div>Framework scoped, built, configured, and deployed. Operator brief, Governor rules, Optimizer connections — all set up for your environment.</div>
+              </div>
+            </div>
+            <div class="about-model-item">
+              <div class="ami-dot"></div>
+              <div class="aml">
+                <div class="aml-head">Retainer — Continuous Tuning</div>
+                <div>Olytic maintains the Meta Loop: Governor rule updates, model improvements, framework versioning, new connections. The system keeps getting better.</div>
+              </div>
+            </div>
+            <div class="about-model-item">
+              <div class="ami-dot"></div>
+              <div class="aml">
+                <div class="aml-head">Framework Expansion</div>
+                <div>As your business evolves, new OGO loops are scoped and deployed alongside existing ones. Each framework runs independently.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       CONTACT
+  ═══════════════════════════════════ -->
+  <section id="contact">
+    <div class="container">
+
+      <div class="contact-layout">
+
+        <div class="contact-left fade-in">
+          <span class="mono dark">Get in Touch</span>
+          <h2 class="section-title light">The right conversation starts with the right problem.</h2>
+          <p class="section-sub light">We don't do demos or sales calls. We do discovery conversations. Tell us what you're trying to solve and we'll tell you whether OGO is the right architecture for it.</p>
+
+          <div class="engagement-options" style="margin-top:40px">
+            <div class="engagement-opt">
+              <div class="eng-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div>
+                <div class="eng-title">Eversite — Web Presence Loop</div>
+                <div class="eng-desc">If your website isn't compounding, this is where to start. We can scope and deploy in weeks.</div>
+              </div>
+            </div>
+            <div class="engagement-opt">
+              <div class="eng-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div>
+                <div class="eng-title">Perpetual Proposal — Deal Room Loop</div>
+                <div class="eng-desc">If you want proposals that improve with every deal, this is the framework to discuss.</div>
+              </div>
+            </div>
+            <div class="engagement-opt">
+              <div class="eng-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div>
+                <div class="eng-title">Custom OGO Build</div>
+                <div class="eng-desc">If you have a repeatable revenue workflow that should be a closed loop, describe it and we'll scope it.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-right fade-in">
+          <div class="contact-box">
+            <h3>Start a Conversation</h3>
+            <p>Tell us what you're trying to solve. No pitch. No demo. A real conversation about whether this architecture fits your problem.</p>
+            <div class="f-row">
+              <label class="f-label">Name</label>
+              <input class="f-input" type="text" placeholder="Your name" />
+            </div>
+            <div class="f-row">
+              <label class="f-label">Company</label>
+              <input class="f-input" type="text" placeholder="Company name" />
+            </div>
+            <div class="f-row">
+              <label class="f-label">What are you trying to solve?</label>
+              <textarea class="f-textarea" placeholder="Describe the workflow, problem, or outcome you're after. The more specific, the better conversation we'll have."></textarea>
+            </div>
+            <div class="f-row">
+              <label class="f-label">How did you hear about Olytic?</label>
+              <select class="f-select">
+                <option value="">Select...</option>
+                <option>Referral</option>
+                <option>LinkedIn</option>
+                <option>Search</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <button class="f-btn">Send</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a class="footer-logo" href="#home">
+        <svg width="18" height="18" viewBox="0 0 100 100" fill="none" style="margin-right:8px">
+          <path d="M50,8 A42,42 0 0 1 86.4,71 L77.3,65.8 A31.5,31.5 0 0 0 50,18.5 Z" fill="#0D1117"/>
+          <path d="M86.4,71 A42,42 0 0 1 13.6,71 L22.7,65.8 A31.5,31.5 0 0 0 77.3,65.8 Z" fill="#C8A96E"/>
+          <path d="M13.6,71 A42,42 0 0 1 50,8 L50,18.5 A31.5,31.5 0 0 0 22.7,65.8 Z" fill="#4A5568"/>
+          <polygon points="89,72.5 77.3,74.6 74.7,64.2" fill="#0D1117"/>
+          <polygon points="11,72.5 15,61.4 25.3,64.2" fill="#C8A96E"/>
+          <polygon points="50,5 57.6,14.1 50,21.5" fill="#4A5568"/>
+        </svg>
+        <span class="footer-logo-word">Ol<span class="y">y</span>tic</span>
+      </a>
+      <div class="footer-meta">&copy; 2026 Olytic. Closed-loop AI systems for revenue.</div>
+      <div class="footer-links">
+        <a href="#our-model">Our Model</a>
+        <a href="#applications">Applications</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Scroll-triggered fade-ins
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+          observer.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
